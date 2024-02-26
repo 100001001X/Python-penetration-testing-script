@@ -1,3 +1,44 @@
+### 
+代码说明
+
+这段代码是一个用于进行盲注（Blind SQL Injection）攻击的脚本，主要用于获取数据库的信息。以下是对代码的详细解释：
+
+1. **全局变量：**
+    - `DBName`: 用于存放数据库名。
+    - `DBTables`: 用于存放数据库表的列表。
+    - `DBColumns`: 用于存放数据库表字段的列表。
+    - `DBData`: 用于存放数据字典，键为字段名，值为字段数据列表。
+
+2. **设置请求会话：**
+    - 通过`requests`库设置了重连次数以及将连接改为短连接，防止因为HTTP连接数过多导致的 Max retries exceeded with url。
+
+3. **主要功能函数：**
+    - `start_sqli(url)`: 主函数，用于开始进行盲注攻击。通过调用其他函数，获取数据库名、表名、字段名、字段数据等信息。
+    
+    - `get_db_name(url)`: 获取数据库名的函数。通过盲注方式获取数据库名的长度和具体的数据库名。
+    
+    - `get_db_tables(url, dbname)`: 获取数据库表的函数。通过盲注方式获取数据库表的数量、表名的长度以及具体的表名。
+    
+    - `get_db_columns(url, dbname, dbtable)`: 获取数据库表字段的函数。通过盲注方式获取数据库表字段的数量、字段名的长度以及具体的字段名。
+    
+    - `get_db_data(url, dbtable, dbcolumn)`: 获取表数据的函数。通过盲注方式获取字段数据的数量、数据长度以及具体的字段数据。
+
+4. **辅助函数：**
+    - `get_payload_length(url, payload)`: 用于获取长度的通用函数，通过盲注方式获取指定 payload 的长度。
+    
+    - `get_payload_data(url, payload, data_len, position=None)`: 用于获取数据的通用函数，通过盲注方式获取指定 payload 的数据。
+    
+    - `get_sleep_time(url, payload)`: 通过盲注方式获取 sleep 时间，即在响应中判断注入语句是否成功执行。
+
+5. **命令行参数解析：**
+    - 使用`optparse`库解析命令行参数，主要接受用户输入的目标 URL。
+
+6. **执行主程序：**
+    - 如果脚本被作为独立程序执行，就会调用`start_sqli`函数，并传入用户输入的目标 URL。
+
+这段代码是一个用于进行盲注攻击的脚本，通过不断尝试获取数据库信息的方式，实现了获取数据库名、表名、字段名以及字段数据的功能
+
+###
 import requests
 import optparse
 import time
